@@ -19,7 +19,7 @@
 
 ## Libraries
 + PyBrain + arac.
-    + FANN has some bug.
+    + Had to pass on FANN due to some bug of the library.
 
 ## Data
 For now, data is borrowed from [here](http://kevintechnology.com/post/71621133663/using-machine-learning-to-recommend-heroes-for).
@@ -31,4 +31,5 @@ For now, data is borrowed from [here](http://kevintechnology.com/post/7162113366
             gcc -o mock mock_input.cpp -L /usr/local/lib -ldoublefann -lm -stdlib=libstdc++ -lstdc++ -I /usr/local/include/
 
 ## Current Progress
-+ ~5 epoches using PyBrain gives ~0.04 average error on test set.
++ FANN can train a network with ~10% error rate on test set. However, some internal bugs of FANN prevent me from using the trained network.
++ ~5 epoches using PyBrain gives ~0.04 average error and ~0.11 error rate on test set.
