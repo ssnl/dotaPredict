@@ -3,7 +3,6 @@ from pybrain.structure import SigmoidLayer
 from pybrain.datasets import SupervisedDataSet
 from pybrain.supervised.trainers import BackpropTrainer
 from pybrain.tools.customxml.networkwriter import NetworkWriter
-from pybrain.tools.customxml.networkreader import NetworkReader
 
 from pymongo import MongoClient
 from progressbar import ProgressBar, Bar, Percentage, FormatLabel, ETA
@@ -48,13 +47,15 @@ print "Dataset built"
 
 train_ds, test_ds = ds.splitWithProportion(0.9)
 
+test_ds.saveToFile("test.data")
+
 print "Training dataset and test dataset built"
 
 net = buildNetwork(NUM_FEATURES, NUM_FEATURES + 100, 20, 10, 1, outclass = SigmoidLayer, fast = True)
 
 print "Network built"
 
-trainer = BackpropTrainer(net, train_ds)
+trainer = BackpropTrainer(net, train_ds, learningrate = 0.5)
 
 for _ in xrange(50):
     print trainer.train()
