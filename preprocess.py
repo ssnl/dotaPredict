@@ -64,7 +64,7 @@ with open("./data/train.in", "wb") as f:
 pbar.finish()
 
 widgets = [FormatLabel('Output test set: %(value)d/%(max)d matches. '), ETA(), ' ', Percentage(), ' ', Bar()]
-pbar = ProgressBar(widgets = widgets, maxval = Y_train.size).start()
+pbar = ProgressBar(widgets = widgets, maxval = Y_test.size).start()
 
 with open("./data/test.in", "wb") as f:
     f.write("{0} {1} 1\n".format(Y_test.size, NUM_FEATURES))
