@@ -24,7 +24,7 @@ widgets = [FormatLabel('Processed: %(value)d/%(max)d matches. '), ETA(), ' ', Pe
 pbar = ProgressBar(widgets = widgets, maxval = NUM_MATCHES).start()
 
 for i, record in enumerate(matches.find()):
-    y = 1.0 if record['radiant_win'] else -1.0
+    y = 1.0 if record['radiant_win'] else 0.0
     x = [0.0 for _ in xrange(NUM_FEATURES)]
     players = record['players']
     for player in players:
