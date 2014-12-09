@@ -31,5 +31,4 @@ For now, data is borrowed from [here](http://kevintechnology.com/post/7162113366
             gcc -o mock mock_input.cpp -L /usr/local/lib -ldoublefann -lm -stdlib=libstdc++ -lstdc++ -I /usr/local/include/
 
 ## Current Progress
-+ FANN can train a network with ~10% error rate on test set. However, some internal bugs of FANN prevent me from using the trained network.
-+ ~% epoches using PyBrain gives ~0.04 average error on test set.
++ ~5 epoches using PyBrain gives ~0.04 average error on test set.
