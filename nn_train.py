@@ -1,19 +1,22 @@
-from pyfann import *
+from pybrain.tools.shortcuts import buildNetwork
+from pybrain.structure import SigmoidLayer
+from pybrain.datasets import SupervisedDataSet
+from pybrain.supervised.trainers import BackpropTrainer
+
+from progressbar import ProgressBar, Bar, Percentage, FormatLabel, ETA
+from cPickle import *
 
 NUM_HEROES = 108
 NUM_FEATURES = NUM_HEROES * 2
 
-connection_rate = 0.8
-learning_rate = 0.7
-desired_error = 0.1
-max_iterations = 100
-iterations_between_reports = 1
+with open("dataset.pkl", "rb") as f:
+    ds = load(f)
+    print "data loaded"
 
-ann = libfann.neural_net()
-ann.create_sparse_array(connection_rate, (NUM_FEATURES, NUM_FEATURES + 100, 20, 10, 1))
-ann.set_activation_function_output(libfann.SIGMOID_SYMMETRIC)
-ann.set_learning_rate(learning_rate)
+train_ds, test_ds = ds.splitWithProportion(0.9)
 
-ann.train_on_file("./data/train.in", max_iterations, iterations_between_reports, desired_error)
+net = buildNetwork(NUM_FEATURES, NUM_FEATURES + 100, 20, 10, 1, outclass = SigmoidLayer)
 
-ann.save("./data/train.net")
+trainer = BackpropTrainer(net, train_ds)
+
+trainer.trainUntilConvergence(verbose = True, maxEpochs = 150, continueEpochs = 15, validationProportion = 0.2)
