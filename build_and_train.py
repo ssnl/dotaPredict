@@ -17,16 +17,17 @@ matches = db.matches
 NUM_HEROES = 108
 NUM_FEATURES = NUM_HEROES * 2
 NUM_MATCHES = matches.count()
-TRAIN_FILE_NAME = 'train.data'
-VALIDATION_FILE_NAME = 'valid.data'
-TEST_FILE_NAME = 'test.data'
-NETWORK_FILE_NAME = 'network.xml'
-NETWORK_VAL_FILE_NAME = 'network_val.save'
+TRAIN_FILE_NAME = './data/train.data'
+VALIDATION_FILE_NAME = './data/valid.data'
+TEST_FILE_NAME = './data/test.data'
+NETWORK_FILE_NAME = './data/network.xml'
+NETWORK_VAL_FILE_NAME = './data/network_val.save'
 ADDITIONAL_EPOCH = 10
 MAX_EPOCH = 50
 VALIDATION_RATIO = 0.1
 TEST_RATIO = 0.1
 
+# Dataset manipulation
 if isfile(TRAIN_FILE_NAME) and isfile(VALIDATION_FILE_NAME) and isfile(TEST_FILE_NAME):
     test_ds = SupervisedDataSet.loadFromFile(TEST_FILE_NAME)
     valid_ds = SupervisedDataSet.loadFromFile(VALIDATION_FILE_NAME)
@@ -60,12 +61,13 @@ else:
     print "Dataset built"
 
     train_ds, test_ds = ds.splitWithProportion(1 - VALIDATION_RATIO - TEST_RATIO)
-    valid_ds, test_ds = train_ds.splitWithProportion(VALIDATION_RATIO / (VALIDATION_RATIO + TEST_RATIO))
+    valid_ds, test_ds = test_ds.splitWithProportion(VALIDATION_RATIO / (VALIDATION_RATIO + TEST_RATIO))
     test_ds.saveToFile(TEST_FILE_NAME)
     valid_ds.saveToFile(VALIDATION_FILE_NAME)
     train_ds.saveToFile(TRAIN_FILE_NAME)
     print "Training, validation and test dataset built"
 
+# Network manipulation
 if isfile(NETWORK_FILE_NAME) and isfile(NETWORK_VAL_FILE_NAME):
     net = NetworkReader.readFrom(NETWORK_FILE_NAME)
     trainer = BackpropTrainer(net, train_ds, learningrate = 0.5)
@@ -78,13 +80,21 @@ else:
     epoch, additional_left, best = 0, ADDITIONAL_EPOCH, trainer.testOnData(valid_ds)
     print "Network built with averge validation error {0}".format(best)
 
+# If something wrong happens..
 def save_values():
+    global best
+    if avg_error < best:
+        best = avg_error
+        NetworkWriter.writeToFile(net, 'network.xml')
+        print "Updated best network and saved to file"
+        additional_left = ADDITIONAL_EPOCH
     with open(NETWORK_VAL_FILE_NAME, "wb") as f:
         dump((epoch, additional_left, best), f)
     print "Network values saved"
 
 atexit.register(save_values)
 
+# Training
 while True:
     print "Average error on train after epoch {0}: {1}".format(epoch + 1, trainer.train())
     epoch += 1
@@ -92,7 +102,7 @@ while True:
     print "Average error on validation set after epoch {0}: {1}".format(epoch, avg_error)
     if avg_error < best:
         best = avg_error
-        NetworkWriter.writeToFile(net, 'network.xml')
+        NetworkWriter.writeToFile(net, NETWORK_FILE_NAME)
         print "Updated best network and saved to file"
         additional_left = ADDITIONAL_EPOCH
     else:

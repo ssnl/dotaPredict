@@ -4,8 +4,8 @@ from pybrain.supervised.trainers import BackpropTrainer
 from os.path import isfile
 from util import push_to_int
 
-NETWORK_FILE_NAME = 'network.xml'
-TEST_FILE_NAME = 'test.data'
+NETWORK_FILE_NAME = './data/network.xml'
+TEST_FILE_NAME = './data/test.data'
 
 assert isfile(NETWORK_FILE_NAME)
 assert isfile(TEST_FILE_NAME)

@@ -5,7 +5,7 @@ import numpy as np
 NUM_HEROES = 108
 NUM_FEATURES = NUM_HEROES * 2
 
-heroes = json.load(open("./heroes.json", "r"))
+heroes = json.load(open("./data/heroes.json", "r"))
 
 heroes_d = {}
 ids_d = {}
