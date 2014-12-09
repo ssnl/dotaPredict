@@ -82,7 +82,7 @@ else:
 
 # If something wrong happens..
 def save_values():
-    global best
+    global best, additional_left
     if avg_error < best:
         best = avg_error
         NetworkWriter.writeToFile(net, 'network.xml')
