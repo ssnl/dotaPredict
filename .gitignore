@@ -1,5 +1,6 @@
 *.data
 data/*.data
+data/dotabot_db.zip
 
 # OS generated files #
 ######################
